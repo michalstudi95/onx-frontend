@@ -1,10 +1,10 @@
 <template>
-  <div class="container pt-5">
+  <div class="container py-5">
     <div class="row d-flex justify-content-center">
       <TheNavigation class="col-6" />
     </div>
     <div class="row d-flex justify-content-center">
-      <RouterView class="col-6 mt-5" />
+      <RouterView class="col-6 mt-5 px-0" />
     </div>
   </div>
 </template>
