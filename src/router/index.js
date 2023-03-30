@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 
+import ClientList from "../views/clients/ClientList.vue";
 import AddClient from "../views/clients/AddClient.vue";
 
 const router = createRouter({
@@ -15,8 +16,13 @@ const router = createRouter({
     {
       path: "/clients",
       name: "clients",
-      //component: HomeView,
-      children: [{ path: "add", name: "add-client", component: AddClient }],
+      component: ClientList,
+    },
+
+    {
+      path: "/clients/add",
+      name: "add-client",
+      component: AddClient,
     },
   ],
 });

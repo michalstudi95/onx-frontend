@@ -1,7 +1,9 @@
 <template>
   <ul class="nav nav-pills">
     <li class="nav-item">
-      <a class="nav-link active" aria-current="page" href="#">Witam !</a>
+      <router-link class="nav-link active" :to="{ name: 'home' }"
+        >Witam !</router-link
+      >
     </li>
     <li class="nav-item dropdown">
       <a
@@ -13,7 +15,11 @@
         >Klienci</a
       >
       <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#">Informacje o klientach</a></li>
+        <li>
+          <router-link class="dropdown-item" :to="{ name: 'clients' }"
+            >Informacje o klientach</router-link
+          >
+        </li>
         <li><hr class="dropdown-divider" /></li>
         <li>
           <router-link class="dropdown-item" :to="{ name: 'add-client' }"

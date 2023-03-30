@@ -1,7 +1,9 @@
 <template>
   <section>
-    <LoadSpinner v-if="loading" />
-    <BaseAlert v-if="!loading && toShowAlert" :message="alertMessage" />
+    <div class="mb-3">
+      <LoadSpinner v-if="loading" />
+      <BaseAlert v-if="!loading && toShowAlert" :message="alertMessage" />
+    </div>
 
     <form @submit.prevent="validateForm" class="d-flex flex-column">
       <!-- client type -->
@@ -35,6 +37,7 @@
 
       <!-- client information -->
       <div>
+        <!-- company name -->
         <div class="mb-3 form-companyName">
           <label for="companyName" class="form-label">Nazwa firmy</label>
           <input
@@ -46,6 +49,7 @@
           />
           <div class="invalid-feedback">Te pole nie może być puste.</div>
         </div>
+        <!-- nip number -->
         <div class="mb-3 form-nip">
           <label for="nip" class="form-label">Numer NIP</label>
           <input
@@ -56,7 +60,11 @@
             ref="nip"
           />
           <div class="invalid-feedback">Te pole nie może być puste.</div>
+          <div v-if="!isNipValid" class="text-danger">
+            Numer NIP powinien składać się z 10 następujących po sobie cyfr.
+          </div>
         </div>
+        <!-- first name -->
         <div class="mb-3 form-firstName">
           <label for="firstName" class="form-label">Imię</label>
           <input
@@ -68,6 +76,7 @@
           />
           <div class="invalid-feedback">Te pole nie może być puste.</div>
         </div>
+        <!-- last name -->
         <div class="mb-3 form-lastName">
           <label for="lastName" class="form-label">Nazwisko</label>
           <input
@@ -79,16 +88,22 @@
           />
           <div class="invalid-feedback">Te pole nie może być puste.</div>
         </div>
+        <!-- phone number -->
         <div class="mb-3 form-phone">
           <label for="phone" class="form-label">Numer telefonu</label>
           <input v-model="phone" type="text" class="form-control" id="phone" />
           <div class="invalid-feedback">Te pole nie może być puste.</div>
         </div>
+        <!-- email address -->
         <div class="mb-3 form-email">
           <label for="email" class="form-label">E-mail</label>
-          <input v-model="email" type="email" class="form-control" id="email" />
+          <input v-model="email" type="text" class="form-control" id="email" />
           <div class="invalid-feedback">Te pole nie może być puste.</div>
+          <div v-if="!isEmailValid" class="text-danger">
+            Wpisz poprawny format adres email.
+          </div>
         </div>
+        <!-- home/company address -->
         <div class="mb-3 form-address">
           <label for="address" class="form-label">Adres</label>
           <textarea
@@ -101,7 +116,13 @@
         </div>
       </div>
 
-      <BaseButton type="submit" class="align-self-end" title="Dodaj klienta" />
+      <button
+        ref="addClient"
+        type="submit"
+        class="btn btn-primary align-self-end"
+      >
+        Dodaj klienta
+      </button>
     </form>
   </section>
 </template>
@@ -118,6 +139,8 @@ export default {
       email: "",
       phone: "",
       address: "",
+      isEmailValid: true,
+      isNipValid: true,
       alertMessage: "",
       loading: false,
     };
@@ -130,6 +153,14 @@ export default {
   },
 
   watch: {
+    loading(value) {
+      if (value) {
+        this.$refs.addClient.disabled = true;
+      } else {
+        this.$refs.addClient.disabled = false;
+      }
+    },
+
     client(client) {
       if (client === "individual") {
         this.clearAllValidationMessages();
@@ -154,7 +185,7 @@ export default {
 
     nip(nip) {
       if (nip !== "")
-        document.getElementById("companyName").classList.remove("is-invalid");
+        document.getElementById("nip").classList.remove("is-invalid");
     },
 
     firstName(firstName) {
@@ -226,6 +257,17 @@ export default {
         if (this.nip === "") {
           validation = false;
           document.getElementById("nip").classList.add("is-invalid");
+        } else {
+          const pattern = /^[0-9]{10}$/;
+          const regex = new RegExp(pattern);
+
+          if (!regex.test(this.nip)) {
+            validation = false;
+            this.isNipValid = false;
+          } else {
+            clientData.nip = this.nip;
+            this.isNipValid = true;
+          }
         }
 
         if (validation) {
@@ -248,7 +290,17 @@ export default {
         validation = false;
         document.getElementById("email").classList.add("is-invalid");
       } else {
-        clientData.email = this.email;
+        const pattern =
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const regex = new RegExp(pattern);
+
+        if (!regex.test(this.email)) {
+          validation = false;
+          this.isEmailValid = false;
+        } else {
+          clientData.email = this.email;
+          this.isEmailValid = true;
+        }
       }
 
       if (this.address === "") {
