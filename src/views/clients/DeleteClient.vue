@@ -1,11 +1,11 @@
 <template>
   <section>
-    <div class="d-flex">
-      <div class="h4 mb-3 me-3">Usuwanie klienta</div>
+    <div class="d-flex mb-2">
+      <PageTitle title="Usuwanie klienta" class="me-3" />
       <LoadSpinner v-if="loading" />
     </div>
 
-    <BaseAlert v-if="alertMessage" :message="alertMessage" />
+    <BaseAlert v-if="alertMessage" :message="alertMessage" class="mb-3" />
 
     <select
       v-if="!loading"
@@ -44,10 +44,12 @@ import { mapState, mapStores, mapActions } from "pinia";
 import ClientCard from "../../components/clients/CLientCard.vue";
 import LoadSpinner from "../../components/UI/LoadSpinner.vue";
 import BaseAlert from "../../components/UI/BaseAlert.vue";
+import PageTitle from "../../components/UI/PageTitle.vue";
 
 export default {
   components: {
     ClientCard,
+    PageTitle,
   },
 
   data() {
