@@ -1,8 +1,14 @@
 <template>
   <section>
-    <div class="h4 mb-3">Usuwanie klienta</div>
+    <div class="d-flex">
+      <div class="h4 mb-3 me-3">Usuwanie klienta</div>
+      <LoadSpinner v-if="loading" />
+    </div>
+
+    <BaseAlert v-if="alertMessage" :message="alertMessage" />
 
     <select
+      v-if="!loading"
       v-model="clientId"
       class="form-select mb-5"
       aria-label="Default select example"
@@ -18,86 +24,101 @@
     </select>
 
     <div v-if="clientId !== 'none'" class="d-flex flex-column">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title mb-3">Dane klienta</h5>
-          <div>
-            <div class="mb-2">
-              <span class="fw-bold">Nazwa firmy :</span>
-              <span> </span>
-            </div>
-            <div class="mb-2">
-              <span class="fw-bold">Numer NIP :</span>
-              <span> </span>
-            </div>
-            <div class="mb-2">
-              <span class="fw-bold">Imię :</span>
-              <span> Test </span>
-            </div>
-            <div class="mb-2">
-              <span class="fw-bold">Nazwisko :</span>
-              <span> </span>
-            </div>
-            <div class="mb-2">
-              <span class="fw-bold">Numer telefonu :</span>
-              <span> </span>
-            </div>
-            <div class="mb-2">
-              <span class="fw-bold">E-mail :</span>
-              <span> </span>
-            </div>
-            <div class="mb-2">
-              <span class="fw-bold">Adres :</span>
-              <span> </span>
-            </div>
-          </div>
-          <a href="#" class="card-link">Przypisany pracownik</a>
-          <a href="#" class="card-link">Lista zakupionych produktów</a>
-        </div>
-      </div>
+      <ClientCard :client="client" />
 
-      <button class="btn btn-danger align-self-end mt-4">Usuń klienta</button>
+      <button
+        @click="deleteClient"
+        ref="deleteClient"
+        class="btn btn-danger align-self-end mt-4"
+      >
+        Usuń klienta
+      </button>
     </div>
   </section>
 </template>
 
 <script>
 import { useClientStore } from "../../stores/ClientStore.js";
-import { mapStores, mapActions } from "pinia";
+import { mapState, mapStores, mapActions } from "pinia";
+//components used in template
+import ClientCard from "../../components/clients/CLientCard.vue";
+import LoadSpinner from "../../components/UI/LoadSpinner.vue";
+import BaseAlert from "../../components/UI/BaseAlert.vue";
 
 export default {
+  components: {
+    ClientCard,
+  },
+
   data() {
     return {
       clientId: "none",
       client: null,
+      loading: false,
+      alertMessage: "",
     };
   },
 
   computed: {
     ...mapStores(useClientStore),
+    ...mapState(useClientStore, ["clientList"]),
   },
 
   watch: {
     clientId(id) {
-      console.log(id);
+      if (id !== "none") {
+        this.alertMessage = "";
+        this.client = this.clientList.find((client) => client.id === id);
+      } else {
+        this.client = null;
+      }
     },
   },
 
   async created() {
+    this.loading = true;
     await this.loadClients();
+    this.loading = false;
   },
 
   methods: {
     ...mapActions(useClientStore, ["loadClients"]),
+    ...mapActions(useClientStore, ["removeClient"]),
 
     formatClientForSelect(client) {
-      return client.first_name
-        ? client.first_name +
-            " " +
-            client.last_name +
-            " - " +
-            client.client_type
-        : client.company_name + " - " + client.client_type;
+      if (client.client_type === "individual") {
+        return (
+          client.first_name + " " + client.last_name + " - " + "indywidualny"
+        );
+      } else {
+        //company
+        return client.company_name + " - " + "firma";
+      }
+    },
+
+    async deleteClient() {
+      this.loading = true;
+      this.$refs.deleteClient.disabled = true;
+      await fetch(`http://127.0.0.1:8000/api/clients/${this.clientId}`, {
+        method: "DELETE",
+      })
+        .then((response) => {
+          console.log(response);
+        })
+        .then((data) => {
+          //success
+          this.loading = false;
+          this.removeClient(this.clientId);
+          this.clientId = "none";
+          this.alertMessage = "Usuwanie klienta powiodło się.";
+          this.$refs.deleteClient.disabled = false;
+        })
+        .catch((error) => {
+          this.loading = false;
+          this.alertMessage = "Usuwanie klienta nie powiodło się.";
+          this.$refs.deleteClient.disabled = false;
+          console.error("Error:", error);
+        });
     },
   },
 };

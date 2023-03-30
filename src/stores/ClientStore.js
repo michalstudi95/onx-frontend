@@ -20,8 +20,12 @@ export const useClientStore = defineStore("client", {
         .then((data) => {
           this.clients = data;
         });
+    },
 
-      console.log(this.clients);
+    removeClient(id) {
+      console.log(id);
+      const index = this.clients.findIndex((c) => c.id === id);
+      this.clients.splice(index, 1);
     },
   },
 });
