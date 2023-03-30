@@ -6,7 +6,7 @@
       <div class="d-flex">
         <div class="form-check me-3">
           <input
-            v-model="client"
+            v-model="clientType"
             value="individual"
             class="form-check-input"
             type="radio"
@@ -18,7 +18,7 @@
         </div>
         <div class="form-check">
           <input
-            v-model="client"
+            v-model="clientType"
             value="company"
             class="form-check-input"
             type="radio"
@@ -124,11 +124,11 @@
 export default {
   emits: ["send-form"],
 
-  props: ["buttonTitle", "sending"],
+  props: ["buttonTitle", "client", "sending"],
 
   data() {
     return {
-      client: "individual",
+      clientType: "individual",
       companyName: "",
       nip: "",
       firstName: "",
@@ -150,13 +150,15 @@ export default {
         : (this.$refs.sendFormButton.disabled = false);
     },
 
-    client(client) {
-      if (client === "individual") {
+    clientType(type) {
+      if (type === "individual") {
         this.clearAllValidationMessages();
         this.$refs.companyName.disabled = true;
         this.$refs.nip.disabled = true;
         this.$refs.firstName.disabled = false;
         this.$refs.lastName.disabled = false;
+        this.companyName = null;
+        this.nip = null;
       } else {
         //company
         this.clearAllValidationMessages();
@@ -164,6 +166,8 @@ export default {
         this.$refs.nip.disabled = false;
         this.$refs.firstName.disabled = true;
         this.$refs.lastName.disabled = true;
+        this.firstName = null;
+        this.lastName = null;
       }
     },
 
@@ -201,6 +205,19 @@ export default {
       if (address !== "")
         document.getElementById("address").classList.remove("is-invalid");
     },
+
+    client(client) {
+      if (client) {
+        this.clientType = this.client.client_type;
+        this.companyName = this.client.company_name;
+        this.nip = this.client.nip;
+        this.firstName = this.client.first_name;
+        this.lastName = this.client.last_name;
+        this.email = this.client.email;
+        this.phone = this.client.phone;
+        this.address = this.client.address;
+      }
+    },
   },
 
   mounted() {
@@ -220,7 +237,7 @@ export default {
       let validation = true;
       let clientData = {};
 
-      if (this.client === "individual") {
+      if (this.clientType === "individual") {
         if (this.firstName === "") {
           document.getElementById("firstName").classList.add("is-invalid");
           validation = false;
@@ -232,7 +249,7 @@ export default {
 
         if (validation) {
           clientData = {
-            client_type: this.client,
+            client_type: this.clientType,
             first_name: this.firstName,
             last_name: this.lastName,
           };
@@ -261,7 +278,7 @@ export default {
 
         if (validation) {
           clientData = {
-            client_type: this.client,
+            client_type: this.clientType,
             company_name: this.companyName,
             nip: this.nip,
           };
@@ -310,7 +327,7 @@ export default {
 
     emitFormData() {
       const client = {
-        client_type: this.client,
+        client_type: this.clientType,
         company_name: this.companyName ? this.companyName : null,
         nip: this.nip ? this.nip : null,
         first_name: this.firstName ? this.firstName : null,
@@ -324,7 +341,7 @@ export default {
     },
 
     resetForm() {
-      this.client = "individual";
+      this.clientType = "individual";
       this.companyName = "";
       this.nip = "";
       this.firstName = "";

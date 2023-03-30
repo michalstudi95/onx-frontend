@@ -26,7 +26,11 @@
             >Dodaj klienta</router-link
           >
         </li>
-        <li><a class="dropdown-item" href="#">Edytuj klienta</a></li>
+        <li>
+          <router-link class="dropdown-item" :to="{ name: 'edit-client' }"
+            >Edytuj klienta</router-link
+          >
+        </li>
         <li>
           <router-link class="dropdown-item" :to="{ name: 'delete-client' }"
             >Usuń klienta</router-link

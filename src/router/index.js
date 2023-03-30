@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 
 import ClientList from "../views/clients/ClientList.vue";
 import AddClient from "../views/clients/AddClient.vue";
+import EditClient from "../views/clients/EditClient.vue";
 import DeleteClient from "../views/clients/DeleteClient.vue";
 
 const router = createRouter({
@@ -24,6 +25,12 @@ const router = createRouter({
       path: "/clients/add",
       name: "add-client",
       component: AddClient,
+    },
+
+    {
+      path: "/clients/edit",
+      name: "edit-client",
+      component: EditClient,
     },
 
     {
