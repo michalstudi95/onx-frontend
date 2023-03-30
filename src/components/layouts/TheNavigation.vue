@@ -24,5 +24,13 @@
         <li><a class="dropdown-item" href="#">Usuń klienta</a></li>
       </ul>
     </li>
+
+    <li class="nav-item">
+      <a class="nav-link" aria-current="page" href="#">Pracownicy</a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" aria-current="page" href="#">Samochody</a>
+    </li>
   </ul>
 </template>
