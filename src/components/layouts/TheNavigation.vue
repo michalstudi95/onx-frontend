@@ -27,7 +27,11 @@
           >
         </li>
         <li><a class="dropdown-item" href="#">Edytuj klienta</a></li>
-        <li><a class="dropdown-item" href="#">Usuń klienta</a></li>
+        <li>
+          <router-link class="dropdown-item" :to="{ name: 'delete-client' }"
+            >Usuń klienta</router-link
+          >
+        </li>
       </ul>
     </li>
 
