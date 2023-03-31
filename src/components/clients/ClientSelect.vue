@@ -13,7 +13,7 @@
 
 <script>
 import { useClientStore } from "../../stores/ClientStore.js";
-import { mapState, mapActions, mapStores } from "pinia";
+import { mapState, mapActions } from "pinia";
 
 export default {
   emits: ["select-client"],
@@ -22,7 +22,6 @@ export default {
 
   computed: {
     ...mapState(useClientStore, ["clientList"]),
-    ...mapStores(useClientStore),
   },
 
   watch: {

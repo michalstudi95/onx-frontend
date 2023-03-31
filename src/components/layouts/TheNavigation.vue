@@ -16,7 +16,7 @@
       >
       <ul class="dropdown-menu">
         <li>
-          <router-link class="dropdown-item" :to="{ name: 'clients' }"
+          <router-link class="dropdown-item" :to="{ name: 'all-clients' }"
             >Lista klientów</router-link
           >
         </li>

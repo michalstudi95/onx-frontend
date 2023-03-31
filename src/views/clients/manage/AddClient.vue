@@ -16,8 +16,11 @@
 </template>
 
 <script>
-import PageTitle from "../../components/UI/PageTitle.vue";
-import ClientForm from "../../components/clients/ClientForm.vue";
+import { useClientStore } from "../../../stores/ClientStore.js";
+import { mapActions } from "pinia";
+
+import PageTitle from "../../../components/UI/PageTitle.vue";
+import ClientForm from "../../../components/clients/ClientForm.vue";
 
 export default {
   components: {
@@ -33,6 +36,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(useClientStore, ["addClientToStore"]),
+
     async addClient(client) {
       console.log(client);
       this.loading = true;
@@ -50,6 +55,7 @@ export default {
           //success
           this.loading = false;
           this.alertMessage = "Dodawanie klienta powiodło się.";
+          this.addClientToStore(client);
         })
         .catch((error) => {
           this.loading = false;

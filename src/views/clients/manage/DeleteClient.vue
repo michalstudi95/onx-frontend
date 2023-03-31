@@ -38,13 +38,13 @@
 </template>
 
 <script>
-import { useClientStore } from "../../stores/ClientStore.js";
+import { useClientStore } from "../../../stores/ClientStore.js";
 import { mapState, mapStores, mapActions } from "pinia";
 //components used in template
-import ClientCard from "../../components/clients/CLientCard.vue";
-import LoadSpinner from "../../components/UI/LoadSpinner.vue";
-import BaseAlert from "../../components/UI/BaseAlert.vue";
-import PageTitle from "../../components/UI/PageTitle.vue";
+import ClientCard from "../../../components/clients/ClientCard.vue";
+import LoadSpinner from "../../../components/UI/LoadSpinner.vue";
+import BaseAlert from "../../../components/UI/BaseAlert.vue";
+import PageTitle from "../../../components/UI/PageTitle.vue";
 
 export default {
   components: {
@@ -85,7 +85,7 @@ export default {
 
   methods: {
     ...mapActions(useClientStore, ["loadClients"]),
-    ...mapActions(useClientStore, ["removeClient"]),
+    ...mapActions(useClientStore, ["deleteClientFromStore"]),
 
     formatClientForSelect(client) {
       if (client.client_type === "individual") {
@@ -110,7 +110,7 @@ export default {
         .then((data) => {
           //success
           this.loading = false;
-          this.removeClient(this.clientId);
+          this.deleteClientFromStore(this.clientId);
           this.clientId = "none";
           this.alertMessage = "Usuwanie klienta powiodło się.";
           this.$refs.deleteClient.disabled = false;

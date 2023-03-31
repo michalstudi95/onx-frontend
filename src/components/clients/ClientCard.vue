@@ -1,7 +1,7 @@
 <template>
-  <div class="card">
+  <div class="card mb-4">
     <div class="card-body">
-      <h5 class="card-title mb-3">Dane klienta</h5>
+      <h5 class="card-title mb-3">Dane klienta #{{ clientId }}</h5>
       <h6 class="card-subtitle mb-2 text-muted text-capitalize">
         {{ clientType }}
       </h6>
@@ -46,6 +46,10 @@ export default {
   props: ["client"],
 
   computed: {
+    clientId() {
+      return this.client ? this.client.id : null;
+    },
+
     clientType() {
       if (this.client) {
         return this.client.client_type === "company" ? "Firma" : "Indywidualny";

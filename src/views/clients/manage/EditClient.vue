@@ -22,9 +22,9 @@
 </template>
 
 <script>
-import PageTitle from "../../components/UI/PageTitle.vue";
-import ClientSelect from "../../components/clients/ClientSelect.vue";
-import ClientForm from "../../components/clients/ClientForm.vue";
+import PageTitle from "../../../components/UI/PageTitle.vue";
+import ClientSelect from "../../../components/clients/ClientSelect.vue";
+import ClientForm from "../../../components/clients/ClientForm.vue";
 
 export default {
   components: {

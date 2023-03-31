@@ -8,8 +8,22 @@ export const useClientStore = defineStore("client", {
   },
 
   getters: {
-    clientList(state) {
-      return state.clients;
+    allClients(state) {
+      return state.clients.reverse();
+    },
+
+    individuals(state) {
+      const clients = state.clients.filter(
+        (client) => client.client_type === "individual"
+      );
+      return clients.reverse();
+    },
+
+    companies(state) {
+      const clients = state.clients.filter(
+        (client) => client.client_type === "company"
+      );
+      return clients.reverse();
     },
   },
 
@@ -22,9 +36,12 @@ export const useClientStore = defineStore("client", {
         });
     },
 
-    removeClient(id) {
-      console.log(id);
-      const index = this.clients.findIndex((c) => c.id === id);
+    addClientToStore(client) {
+      this.clients.push(client);
+    },
+
+    deleteClientFromStore(id) {
+      const index = this.clients.findIndex((client) => client.id === id);
       this.clients.splice(index, 1);
     },
   },

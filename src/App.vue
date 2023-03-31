@@ -4,7 +4,9 @@
       <TheNavigation class="col-6" />
     </div>
     <div class="row d-flex justify-content-center">
-      <RouterView class="col-6 mt-5 px-0" />
+      <div class="col-6 mt-5 px-0">
+        <RouterView />
+      </div>
     </div>
   </div>
 </template>
