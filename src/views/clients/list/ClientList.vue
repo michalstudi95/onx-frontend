@@ -1,8 +1,5 @@
 <template>
-  <div class="d-flex">
-    <PageTitle title="Lista klientów" class="mb-5 me-3" />
-    <LoadSpinner v-if="loading" />
-  </div>
+  <PageTitle title="Lista klientów" class="mb-5 me-3" />
 
   <div class="d-flex justify-content-center mb-5">
     <div>
@@ -24,13 +21,10 @@
 </template>
 
 <script>
-import ClientCard from "../../../components/clients/ClientCard.vue";
 import PageTitle from "../../../components/UI/PageTitle.vue";
-import LoadSpinner from "../../../components/UI/LoadSpinner.vue";
 
 export default {
   components: {
-    ClientCard,
     PageTitle,
   },
 };
