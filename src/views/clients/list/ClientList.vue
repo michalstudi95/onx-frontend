@@ -6,17 +6,17 @@
 
   <div class="d-flex justify-content-center mb-5">
     <div>
-      <button class="btn btn-primary me-3 link">
-        <router-link :to="{ name: 'all-clients' }">Wszyscy klienci</router-link>
-      </button>
-      <button class="btn btn-primary me-3 link">
-        <router-link :to="{ name: 'individuals' }"
-          >Klienci indywidualni</router-link
-        >
-      </button>
-      <button class="btn btn-primary link">
-        <router-link :to="{ name: 'companies' }">Firmy</router-link>
-      </button>
+      <router-link class="btn btn-primary me-3" :to="{ name: 'all-clients' }"
+        >Wszyscy klienci</router-link
+      >
+
+      <router-link class="btn btn-primary me-3" :to="{ name: 'individuals' }"
+        >Klienci indywidualni</router-link
+      >
+
+      <router-link class="btn btn-primary" :to="{ name: 'companies' }"
+        >Firmy</router-link
+      >
     </div>
   </div>
 
@@ -35,10 +35,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.link a {
-  text-decoration: none;
-  color: #fff;
-}
-</style>
