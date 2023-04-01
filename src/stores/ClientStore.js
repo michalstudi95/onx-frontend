@@ -57,7 +57,7 @@ export const useClientStore = defineStore("client", {
         });
     },
 
-    async loadClients(type, sort, page) {
+    async loadClientsByFilters(type, sort, page) {
       this.clientType = type;
       this.sort = sort;
 

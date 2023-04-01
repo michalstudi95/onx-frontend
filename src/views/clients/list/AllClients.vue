@@ -52,6 +52,7 @@ export default {
   computed: {
     ...mapState(useClientStore, ["clientList"]),
     ...mapState(useClientStore, ["clientTypeValue"]),
+    ...mapState(useClientStore, ["sortValue"]),
     ...mapState(useClientStore, ["currentPageValue"]),
     ...mapState(useClientStore, ["lastPageValue"]),
   },
@@ -67,20 +68,26 @@ export default {
           page: "1",
         },
       });
-      await this.loadClients("all", value, "1");
+      await this.loadClientsByFilters("all", value, "1");
       this.loading = false;
     },
   },
 
   async created() {
     this.loading = true;
-    await this.loadClients("all", "desc", "1");
+    await this.loadClientsByFilters(
+      this.$route.query.type,
+      this.$route.query.sort,
+      this.$route.query.page
+    );
+    if (this.$route.query.sort === "asc") this.sort = "asc";
+    if (this.$route.query.sort === "desc") this.sort = "desc";
     this.loading = false;
   },
 
   methods: {
     ...mapActions(useClientStore, ["loadClientsForPreviousPage"]),
-    ...mapActions(useClientStore, ["loadClients"]),
+    ...mapActions(useClientStore, ["loadClientsByFilters"]),
     ...mapActions(useClientStore, ["loadClientsForNextPage"]),
 
     async setPrevPage() {
@@ -91,7 +98,7 @@ export default {
 
     async setPage(page) {
       this.loading = true;
-      await this.loadClients("all", this.sort, page);
+      await this.loadClientsByFilters("all", this.sort, page);
       this.loading = false;
     },
 

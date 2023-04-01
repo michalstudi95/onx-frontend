@@ -70,20 +70,26 @@ export default {
           page: "1",
         },
       });
-      await this.loadClients("individual", value, "1");
+      await this.loadClientsByFilters("individual", value, "1");
       this.loading = false;
     },
   },
 
   async created() {
     this.loading = true;
-    await this.loadClients("individual", "desc", "1");
+    await this.loadClientsByFilters(
+      this.$route.query.type,
+      this.$route.query.sort,
+      this.$route.query.page
+    );
+    if (this.$route.query.sort === "asc") this.sort = "asc";
+    if (this.$route.query.sort === "desc") this.sort = "desc";
     this.loading = false;
   },
 
   methods: {
     ...mapActions(useClientStore, ["loadClientsForPreviousPage"]),
-    ...mapActions(useClientStore, ["loadClients"]),
+    ...mapActions(useClientStore, ["loadClientsByFilters"]),
     ...mapActions(useClientStore, ["loadClientsForNextPage"]),
 
     async setPrevPage() {
@@ -94,7 +100,7 @@ export default {
 
     async setPage(page) {
       this.loading = true;
-      await this.loadClients("individual", this.sort, page);
+      await this.loadClientsByFilters("individual", this.sort, page);
       this.loading = false;
     },
 

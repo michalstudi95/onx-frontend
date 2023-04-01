@@ -71,20 +71,27 @@ export default {
           page: "1",
         },
       });
-      await this.loadClients("company", value, "1");
+      await this.loadClientsByFilters("company", value, "1");
       this.loading = false;
     },
   },
 
   async created() {
     this.loading = true;
-    await this.loadClients("company", "desc", "1");
+    await this.loadClientsByFilters(
+      this.$route.query.type,
+      this.$route.query.sort,
+      this.$route.query.page
+    );
+
+    if (this.$route.query.sort === "asc") this.sort = "asc";
+    if (this.$route.query.sort === "desc") this.sort = "desc";
     this.loading = false;
   },
 
   methods: {
     ...mapActions(useClientStore, ["loadClientsForPreviousPage"]),
-    ...mapActions(useClientStore, ["loadClients"]),
+    ...mapActions(useClientStore, ["loadClientsByFilters"]),
     ...mapActions(useClientStore, ["loadClientsForNextPage"]),
 
     async setPrevPage() {
@@ -95,7 +102,7 @@ export default {
 
     async setPage(page) {
       this.loading = true;
-      await this.loadClients("company", this.sort, page);
+      await this.loadClientsByFilters("company", this.sort, page);
       this.loading = false;
     },
 
