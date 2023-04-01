@@ -16,7 +16,12 @@
       >
       <ul class="dropdown-menu">
         <li>
-          <router-link class="dropdown-item" :to="{ name: 'all-clients' }"
+          <router-link
+            class="dropdown-item"
+            :to="{
+              name: 'client-list',
+              query: { type: 'all', sort: 'desc', page: '1' },
+            }"
             >Lista klientów</router-link
           >
         </li>

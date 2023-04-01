@@ -33,6 +33,10 @@ export const useClientStore = defineStore("client", {
     sortValue(state) {
       return state.sort;
     },
+
+    lastPageValue(state) {
+      return state.lastPage;
+    },
   },
 
   actions: {

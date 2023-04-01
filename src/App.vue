@@ -12,9 +12,6 @@
 </template>
 
 <script>
-import { useClientStore } from "./stores/ClientStore";
-import { mapState, mapActions } from "pinia";
-
 import TheNavigation from "./components/layouts/TheNavigation.vue";
 
 export default {

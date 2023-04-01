@@ -14,20 +14,9 @@
         <a class="page-link" href="#">{{ page }}</a>
       </li>
       <li @click="nextPage" class="page-item">
-        <router-link
-          :to="{
-            query: {
-              type: this.clientTypeValue,
-              sort: this.sortValue,
-              page: this.currentPageValue,
-            },
-          }"
-          class="page-link"
-          href="#"
-          aria-label="Next"
-        >
+        <a class="page-link" href="#" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
-        </router-link>
+        </a>
       </li>
     </ul>
   </nav>
@@ -50,25 +39,47 @@ export default {
     ...mapState(useClientStore, ["clientTypeValue"]),
     ...mapState(useClientStore, ["sortValue"]),
     ...mapState(useClientStore, ["currentPageValue"]),
-  },
-
-  watch: {
-    currentPageValue(page) {
-      this.$route.query.page = page;
-    },
+    ...mapState(useClientStore, ["lastPageValue"]),
   },
 
   methods: {
     prevPage() {
       this.$emit("prev-page");
+      this.$router.push({
+        name: "client-list",
+        query: {
+          type: this.clientTypeValue,
+          sort: this.sortValue,
+          page: this.currentPageValue > 1 ? this.currentPageValue - 1 : 1,
+        },
+      });
     },
 
     setPage(page) {
       this.$emit("current-page", page);
+      this.$router.push({
+        name: "client-list",
+        query: {
+          type: this.clientTypeValue,
+          sort: this.sortValue,
+          page: page,
+        },
+      });
     },
 
     nextPage() {
       this.$emit("next-page");
+      this.$router.push({
+        name: "client-list",
+        query: {
+          type: this.clientTypeValue,
+          sort: this.sortValue,
+          page:
+            this.currentPageValue === this.lastPageValue
+              ? this.currentPageValue
+              : this.currentPageValue + 1,
+        },
+      });
     },
   },
 };

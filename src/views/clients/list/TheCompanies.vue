@@ -56,12 +56,22 @@ export default {
 
   computed: {
     ...mapState(useClientStore, ["clientList"]),
+    ...mapState(useClientStore, ["clientTypeValue"]),
+    ...mapState(useClientStore, ["currentPageValue"]),
   },
 
   watch: {
-    async sort(sort) {
+    async sort(value) {
       this.loading = true;
-      await this.loadClients("company", sort, "1");
+      this.$router.push({
+        name: "client-list",
+        query: {
+          type: this.clientTypeValue,
+          sort: value,
+          page: "1",
+        },
+      });
+      await this.loadClients("company", value, "1");
       this.loading = false;
     },
   },

@@ -3,9 +3,6 @@ import HomeView from "../views/HomeView.vue";
 
 //client list
 import ClientList from "../views/clients/list/ClientList.vue";
-import AllClients from "../views/clients/list/AllClients.vue";
-import TheIndividuals from "../views/clients/list/TheIndividuals.vue";
-import TheCompanies from "../views/clients/list/TheCompanies.vue";
 //managing clients
 import AddClient from "../views/clients/manage/AddClient.vue";
 import EditClient from "../views/clients/manage/EditClient.vue";
@@ -21,29 +18,9 @@ const router = createRouter({
     },
 
     {
-      path: "/client-list",
+      path: "/clients",
+      name: "client-list",
       component: ClientList,
-      redirect: { name: "all-clients" },
-
-      children: [
-        {
-          path: "all",
-          name: "all-clients",
-          component: AllClients,
-        },
-
-        {
-          path: "individuals",
-          name: "individuals",
-          component: TheIndividuals,
-        },
-
-        {
-          path: "companies",
-          name: "companies",
-          component: TheCompanies,
-        },
-      ],
     },
 
     {
