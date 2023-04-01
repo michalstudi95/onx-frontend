@@ -33,6 +33,11 @@ export default {
     },
   },
 
+  mounted() {
+    const page = this.$route.query.page;
+    if (page) this.setPageBadgeActive(page);
+  },
+
   updated() {
     const page = this.$route.query.page;
     if (page) this.setPageBadgeActive(page);
