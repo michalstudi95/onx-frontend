@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 
 //client list
-import ClientList from "../views/clients/list/ClientList.vue";
+import ClientList from "../views/clients/ClientList.vue";
 //managing clients
 import AddClient from "../views/clients/manage/AddClient.vue";
 import EditClient from "../views/clients/manage/EditClient.vue";
@@ -24,19 +24,19 @@ const router = createRouter({
     },
 
     {
-      path: "/client-manage/add",
+      path: "/clients/manage/add",
       name: "add-client",
       component: AddClient,
     },
 
     {
-      path: "/client-manage/edit",
+      path: "/clients/manage/edit",
       name: "edit-client",
       component: EditClient,
     },
 
     {
-      path: "/client-manage/delete",
+      path: "/clients/manage/delete",
       name: "delete-client",
       component: DeleteClient,
     },

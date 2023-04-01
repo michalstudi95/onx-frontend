@@ -14,11 +14,11 @@ export const useClientStore = defineStore("client", {
   },
 
   getters: {
-    clientList(state) {
+    clientsValue(state) {
       return state.clients;
     },
 
-    numberOfPages(state) {
+    lastPageValue(state) {
       return state.lastPage;
     },
 

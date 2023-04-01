@@ -1,5 +1,5 @@
 <template>
-  <nav aria-label="Page navigation example">
+  <nav>
     <ul class="pagination">
       <li @click="prevPage" class="page-item">
         <a class="page-link" href="#" aria-label="Previous">
@@ -23,63 +23,43 @@
 </template>
 
 <script>
-import { useClientStore } from "../../stores/ClientStore.js";
-import { mapState } from "pinia";
-
 export default {
-  props: {
-    clients: {
-      type: Array,
-      required: true,
+  props: ["numberOfPages"],
+
+  watch: {
+    $route(value) {
+      const page = value.query.page;
+      this.setPageBadgeActive(page);
     },
   },
 
-  computed: {
-    ...mapState(useClientStore, ["numberOfPages"]),
-    ...mapState(useClientStore, ["clientTypeValue"]),
-    ...mapState(useClientStore, ["sortValue"]),
-    ...mapState(useClientStore, ["currentPageValue"]),
-    ...mapState(useClientStore, ["lastPageValue"]),
+  updated() {
+    const page = this.$route.query.page;
+    if (page) this.setPageBadgeActive(page);
   },
 
   methods: {
     prevPage() {
       this.$emit("prev-page");
-      this.$router.push({
-        name: "client-list",
-        query: {
-          type: this.clientTypeValue,
-          sort: this.sortValue,
-          page: this.currentPageValue > 1 ? this.currentPageValue - 1 : 1,
-        },
-      });
     },
 
     setPage(page) {
-      this.$emit("current-page", page);
-      this.$router.push({
-        name: "client-list",
-        query: {
-          type: this.clientTypeValue,
-          sort: this.sortValue,
-          page: page,
-        },
-      });
+      this.$emit("set-page", page);
     },
 
     nextPage() {
       this.$emit("next-page");
-      this.$router.push({
-        name: "client-list",
-        query: {
-          type: this.clientTypeValue,
-          sort: this.sortValue,
-          page:
-            this.currentPageValue === this.lastPageValue
-              ? this.currentPageValue
-              : this.currentPageValue + 1,
-        },
-      });
+    },
+
+    setPageBadgeActive(page) {
+      const badges = document.querySelectorAll(".pagination .page-item");
+      for (let badge of badges) {
+        badge.classList.remove("active");
+      }
+
+      for (let badge of badges) {
+        if (badge.textContent === page) badge.classList.add("active");
+      }
     },
   },
 };
