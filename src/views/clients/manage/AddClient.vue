@@ -39,7 +39,6 @@ export default {
     ...mapActions(useClientStore, ["addClientToStore"]),
 
     async addClient(client) {
-      console.log(client);
       this.loading = true;
       await fetch("http://localhost:8000/api/clients", {
         method: "POST",
@@ -48,9 +47,7 @@ export default {
         },
         body: JSON.stringify(client),
       })
-        .then((response) => {
-          console.log(response);
-        })
+        .then((response) => {})
         .then((data) => {
           //success
           this.loading = false;

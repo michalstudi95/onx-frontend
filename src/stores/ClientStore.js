@@ -40,6 +40,18 @@ export const useClientStore = defineStore("client", {
   },
 
   actions: {
+    async loadAllClients() {
+      await fetch("http://localhost:8000/api/clients")
+        .then((response) => response.json())
+        .then((data) => {
+          this.clients = data;
+        });
+    },
+
+    /**
+     * methods for pagination
+     */
+
     async loadClientsForPreviousPage() {
       await fetch(this.prevPageUrl)
         .then((response) => response.json())

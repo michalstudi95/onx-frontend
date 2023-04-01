@@ -5,14 +5,12 @@
       <LoadSpinner v-if="loading" />
     </div>
 
-    <ClientSelect
-      @select-client="selectClient"
-      :toUpdateSelect="toUpdateSelect"
-    />
-
     <BaseAlert v-if="alertMessage" :message="alertMessage" class="mb-3" />
 
+    <ClientSelect @select-client="selectClient" />
+
     <ClientForm
+      v-if="clientId"
       @send-form="editClient"
       buttonTitle="Edytuj klienta"
       :client="client"
@@ -38,13 +36,19 @@ export default {
       client: null,
       alertMessage: "",
       loading: false,
-      toUpdateSelect: false,
     };
+  },
+
+  computed: {
+    clientId() {
+      return this.client ? this.client.id : null;
+    },
   },
 
   methods: {
     selectClient(client) {
       this.client = client;
+      this.alertMessage = "";
     },
 
     async editClient(client) {
@@ -57,18 +61,18 @@ export default {
         },
         body: JSON.stringify(client),
       })
-        .then((response) => {
-          console.log(response);
-        })
+        .then((response) => {})
         .then((data) => {
           //success
           this.loading = false;
           this.alertMessage = "Edycja klienta powiodła się.";
           this.toUpdateSelect = true;
+          this.client = null;
         })
         .catch((error) => {
           this.loading = false;
           this.alertMessage = "Edycja klienta nie powiodła się.";
+          this.client = null;
           console.error("Error:", error);
         });
     },

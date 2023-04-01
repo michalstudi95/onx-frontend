@@ -7,29 +7,15 @@
 
     <BaseAlert v-if="alertMessage" :message="alertMessage" class="mb-3" />
 
-    <select
-      v-if="!loading"
-      v-model="clientId"
-      class="form-select mb-5"
-      aria-label="Default select example"
-    >
-      <option selected value="none">...</option>
-      <option
-        v-for="client in clientStore.clients"
-        :key="client.id"
-        :value="client.id"
-      >
-        {{ formatClientForSelect(client) }}
-      </option>
-    </select>
+    <ClientSelect @select-client="selectClient" />
 
-    <div v-if="clientId !== 'none'" class="d-flex flex-column">
+    <div v-if="clientId" class="d-flex flex-column">
       <ClientCard :client="client" />
 
       <button
         @click="deleteClient"
         ref="deleteClient"
-        class="btn btn-danger align-self-end mt-4"
+        class="btn btn-danger align-self-end"
       >
         Usuń klienta
       </button>
@@ -39,8 +25,9 @@
 
 <script>
 import { useClientStore } from "../../../stores/ClientStore.js";
-import { mapState, mapStores, mapActions } from "pinia";
+import { mapActions } from "pinia";
 //components used in template
+import ClientSelect from "../../../components/clients/ClientSelect.vue";
 import ClientCard from "../../../components/clients/ClientCard.vue";
 import LoadSpinner from "../../../components/UI/LoadSpinner.vue";
 import BaseAlert from "../../../components/UI/BaseAlert.vue";
@@ -48,13 +35,13 @@ import PageTitle from "../../../components/UI/PageTitle.vue";
 
 export default {
   components: {
+    ClientSelect,
     ClientCard,
     PageTitle,
   },
 
   data() {
     return {
-      clientId: "none",
       client: null,
       loading: false,
       alertMessage: "",
@@ -62,40 +49,17 @@ export default {
   },
 
   computed: {
-    ...mapStores(useClientStore),
-    ...mapState(useClientStore, ["clientList"]),
-  },
-
-  watch: {
-    clientId(id) {
-      if (id !== "none") {
-        this.alertMessage = "";
-        this.client = this.clientList.find((client) => client.id === id);
-      } else {
-        this.client = null;
-      }
+    clientId() {
+      return this.client ? this.client.id : null;
     },
   },
 
-  async created() {
-    this.loading = true;
-    await this.loadClients();
-    this.loading = false;
-  },
-
   methods: {
-    ...mapActions(useClientStore, ["loadClients"]),
     ...mapActions(useClientStore, ["deleteClientFromStore"]),
 
-    formatClientForSelect(client) {
-      if (client.client_type === "individual") {
-        return (
-          client.first_name + " " + client.last_name + " - " + "indywidualny"
-        );
-      } else {
-        //company
-        return client.company_name + " - " + "firma";
-      }
+    selectClient(client) {
+      this.client = client;
+      this.alertMessage = "";
     },
 
     async deleteClient() {
@@ -104,9 +68,7 @@ export default {
       await fetch(`http://127.0.0.1:8000/api/clients/${this.clientId}`, {
         method: "DELETE",
       })
-        .then((response) => {
-          console.log(response);
-        })
+        .then((response) => {})
         .then((data) => {
           //success
           this.loading = false;
@@ -114,11 +76,13 @@ export default {
           this.clientId = "none";
           this.alertMessage = "Usuwanie klienta powiodło się.";
           this.$refs.deleteClient.disabled = false;
+          this.client = null;
         })
         .catch((error) => {
           this.loading = false;
           this.alertMessage = "Usuwanie klienta nie powiodło się.";
           this.$refs.deleteClient.disabled = false;
+          this.client = null;
           console.error("Error:", error);
         });
     },

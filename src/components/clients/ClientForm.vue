@@ -223,9 +223,21 @@ export default {
   mounted() {
     this.$refs.companyName.disabled = true;
     this.$refs.nip.disabled = true;
+    if (this.client) this.initForm();
   },
 
   methods: {
+    initForm() {
+      this.clientType = this.client.client_type;
+      this.companyName = this.client.company_name;
+      this.nip = this.client.nip;
+      this.firstName = this.client.first_name;
+      this.lastName = this.client.last_name;
+      this.email = this.client.email;
+      this.phone = this.client.phone;
+      this.address = this.client.address;
+    },
+
     clearAllValidationMessages() {
       const formControls = document.getElementsByClassName("form-control");
       for (let item of formControls) {
