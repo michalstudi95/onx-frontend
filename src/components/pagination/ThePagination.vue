@@ -14,9 +14,20 @@
         <a class="page-link" href="#">{{ page }}</a>
       </li>
       <li @click="nextPage" class="page-item">
-        <a class="page-link" href="#" aria-label="Next">
+        <router-link
+          :to="{
+            query: {
+              type: this.clientTypeValue,
+              sort: this.sortValue,
+              page: this.currentPageValue,
+            },
+          }"
+          class="page-link"
+          href="#"
+          aria-label="Next"
+        >
           <span aria-hidden="true">&raquo;</span>
-        </a>
+        </router-link>
       </li>
     </ul>
   </nav>
@@ -36,6 +47,15 @@ export default {
 
   computed: {
     ...mapState(useClientStore, ["numberOfPages"]),
+    ...mapState(useClientStore, ["clientTypeValue"]),
+    ...mapState(useClientStore, ["sortValue"]),
+    ...mapState(useClientStore, ["currentPageValue"]),
+  },
+
+  watch: {
+    currentPageValue(page) {
+      this.$route.query.page = page;
+    },
   },
 
   methods: {

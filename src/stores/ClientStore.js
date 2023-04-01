@@ -5,7 +5,8 @@ export const useClientStore = defineStore("client", {
     return {
       clients: [],
       clientType: "",
-      currentPage: 1,
+      currentPage: null,
+      sort: "",
       lastPage: null,
       prevPageUrl: "",
       nextPageUrl: "",
@@ -20,6 +21,18 @@ export const useClientStore = defineStore("client", {
     numberOfPages(state) {
       return state.lastPage;
     },
+
+    clientTypeValue(state) {
+      return state.clientType;
+    },
+
+    currentPageValue(state) {
+      return state.currentPage;
+    },
+
+    sortValue(state) {
+      return state.sort;
+    },
   },
 
   actions: {
@@ -31,51 +44,41 @@ export const useClientStore = defineStore("client", {
           this.clients = data.data;
           this.prevPageUrl = `http://127.0.0.1:8000/api/clients?type=${
             this.clientType
-          }&page=${
+          }&sort=${this.sort}&page=${
             this.currentPage === 1 ? this.currentPage : this.currentPage - 1
           }`;
           this.nextPageUrl = `http://127.0.0.1:8000/api/clients?type=${
             this.clientType
-          }&page=${this.currentPage + 1}`;
+          }&sort=${this.sort}&page=${this.currentPage + 1}`;
         });
-
-      console.log("Prev");
-      console.log(this.prevPageUrl);
-      console.log(this.nextPageUrl);
-      console.log(this.currentPage);
     },
 
-    async loadClients(type, page) {
+    async loadClients(type, sort, page) {
       this.clientType = type;
-      this.currentPage = page;
+      this.sort = sort;
 
       await fetch(
-        `http://127.0.0.1:8000/api/clients?type=${this.clientType}&page=${page}`
+        `http://127.0.0.1:8000/api/clients?type=${this.clientType}&sort=${sort}&page=${page}`
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           this.clients = data.data;
-          this.currentPage = data.current_page;
           this.lastPage = data.last_page;
+          this.currentPage = data.current_page;
 
           this.prevPageUrl = `http://127.0.0.1:8000/api/clients?type=${
             this.clientType
-          }&page=${
+          }&sort=${this.sort}&page=${
             this.currentPage === 1 ? this.currentPage : this.currentPage - 1
           }`;
           this.nextPageUrl = `http://127.0.0.1:8000/api/clients?type=${
             this.clientType
-          }&page=${
+          }&sort=${this.sort}&page=${
             this.currentPage === this.lastPage
               ? this.currentPage
               : this.currentPage + 1
           }`;
         });
-      console.log("Load");
-      console.log(this.prevPageUrl);
-      console.log(this.nextPageUrl);
-      console.log(this.currentPage);
     },
 
     async loadClientsForNextPage() {
@@ -86,19 +89,15 @@ export const useClientStore = defineStore("client", {
           this.clients = data.data;
           this.prevPageUrl = `http://127.0.0.1:8000/api/clients?type=${
             this.clientType
-          }&page=${this.currentPage - 1}`;
+          }&sort=${this.sort}&page=${this.currentPage - 1}`;
           this.nextPageUrl = `http://127.0.0.1:8000/api/clients?type=${
             this.clientType
-          }&page=${
+          }&sort=${this.sort}&page=${
             this.currentPage === this.lastPage
               ? this.currentPage
               : this.currentPage + 1
           }`;
         });
-      console.log("Next");
-      console.log(this.prevPageUrl);
-      console.log(this.nextPageUrl);
-      console.log(this.currentPage);
     },
 
     addClientToStore(client) {

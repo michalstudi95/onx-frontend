@@ -1,4 +1,14 @@
 <template>
+  <div class="d-flex flex-column mb-3">
+    <select
+      v-model="sort"
+      class="form-select form-select-sm align-self-end"
+      style="max-width: 10rem"
+    >
+      <option selected value="desc">od najnowszych</option>
+      <option value="asc">od najstarszych</option>
+    </select>
+  </div>
   <LoadSpinner v-if="loading" />
   <ClientCard
     v-else
@@ -32,6 +42,14 @@ export default {
 
   data() {
     return {
+      sort: "desc",
+      loading: false,
+    };
+  },
+
+  data() {
+    return {
+      sort: "desc",
       loading: false,
     };
   },
@@ -40,9 +58,17 @@ export default {
     ...mapState(useClientStore, ["clientList"]),
   },
 
+  watch: {
+    async sort(sort) {
+      this.loading = true;
+      await this.loadClients("company", sort, "1");
+      this.loading = false;
+    },
+  },
+
   async created() {
     this.loading = true;
-    await this.loadClients("company", this.currentPage);
+    await this.loadClients("company", "desc", "1");
     this.loading = false;
   },
 
@@ -59,7 +85,7 @@ export default {
 
     async setPage(page) {
       this.loading = true;
-      await this.loadClients("company", page);
+      await this.loadClients("company", this.sort, page);
       this.loading = false;
     },
 
