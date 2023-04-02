@@ -7,7 +7,11 @@
 
     <BaseAlert v-if="alertMessage" :message="alertMessage" class="mb-3" />
 
-    <ClientSelect @select-client="selectClient" />
+    <ClientSelect
+      @select-client="selectClient"
+      @update-select="setUpdateClientSelectToFalse"
+      :updateSelect="updateClientSelect"
+    />
 
     <div v-if="clientId" class="d-flex flex-column">
       <ClientCard :client="client" />
@@ -45,6 +49,7 @@ export default {
       client: null,
       loading: false,
       alertMessage: "",
+      updateClientSelect: false,
     };
   },
 
@@ -62,6 +67,10 @@ export default {
       this.alertMessage = "";
     },
 
+    setUpdateClientSelectToFalse() {
+      this.updateClientSelect = false;
+    },
+
     async deleteClient() {
       this.loading = true;
       this.$refs.deleteClient.disabled = true;
@@ -73,7 +82,7 @@ export default {
           //success
           this.loading = false;
           this.deleteClientFromStore(this.clientId);
-          this.clientId = "none";
+          this.updateClientSelect = true;
           this.alertMessage = "Usuwanie klienta powiodło się.";
           this.$refs.deleteClient.disabled = false;
           this.client = null;

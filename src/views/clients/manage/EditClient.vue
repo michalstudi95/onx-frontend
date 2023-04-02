@@ -7,7 +7,11 @@
 
     <BaseAlert v-if="alertMessage" :message="alertMessage" class="mb-3" />
 
-    <ClientSelect @select-client="selectClient" />
+    <ClientSelect
+      @select-client="selectClient"
+      @update-select="setUpdateClientSelectToFalse"
+      :updateSelect="updateClientSelect"
+    />
 
     <ClientForm
       v-if="clientId"
@@ -35,6 +39,7 @@ export default {
     return {
       client: null,
       alertMessage: "",
+      updateClientSelect: false,
       loading: false,
     };
   },
@@ -49,6 +54,10 @@ export default {
     selectClient(client) {
       this.client = client;
       this.alertMessage = "";
+    },
+
+    setUpdateClientSelectToFalse() {
+      this.updateClientSelect = false;
     },
 
     async editClient(client) {
@@ -66,7 +75,7 @@ export default {
           //success
           this.loading = false;
           this.alertMessage = "Edycja klienta powiodła się.";
-          this.toUpdateSelect = true;
+          this.updateClientSelect = true;
           this.client = null;
         })
         .catch((error) => {

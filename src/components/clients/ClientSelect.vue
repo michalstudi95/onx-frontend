@@ -7,11 +7,7 @@
     aria-label="Default select example"
   >
     <option selected value="none">...</option>
-    <option
-      v-for="client in revereseClients"
-      :key="client.id"
-      :value="client.id"
-    >
+    <option v-for="client in clients" :key="client.id" :value="client.id">
       {{ formatClientForSelect(client) }}
     </option>
   </select>
@@ -28,7 +24,9 @@ export default {
     LoadSpinner,
   },
 
-  emits: ["select-client"],
+  emits: ["select-client", "update-select"],
+
+  props: ["updateSelect"],
 
   data() {
     return {
@@ -37,17 +35,20 @@ export default {
   },
 
   computed: {
-    ...mapState(useClientStore, ["clientList"]),
-    revereseClients() {
-      return this.clientList.reverse();
+    ...mapState(useClientStore, ["clientsValue"]),
+    clients() {
+      return this.clientsValue.length > 0 ? this.clientsValue.reverse() : [];
     },
   },
 
   watch: {
-    async toUpdateSelect() {
-      this.loading = true;
-      await this.loadAllClients();
-      this.loading = false;
+    async updateSelect(value) {
+      if (value) {
+        this.loading = true;
+        await this.loadAllClients();
+        this.$emit("update-select");
+        this.loading = false;
+      }
     },
   },
 
@@ -62,7 +63,7 @@ export default {
 
     selectClient(e) {
       const id = e.target.value;
-      const client = this.clientList.find((c) => c.id == id);
+      const client = this.clientsValue.find((c) => c.id == id);
       this.$emit("select-client", client);
     },
 
