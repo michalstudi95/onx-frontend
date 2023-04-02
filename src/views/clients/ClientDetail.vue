@@ -27,10 +27,16 @@
       </thead>
       <tbody>
         <tr v-for="product in productsValue" :key="product.id">
-          <th>{{ product.id }}</th>
+          <td>{{ product.id }}</td>
           <td>{{ product.name }}</td>
           <td>{{ product.description }}</td>
           <td>{{ product.price }}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="fw-bold text-end">SUMA</td>
+          <td>{{ total }}</td>
         </tr>
       </tbody>
     </table>
@@ -68,6 +74,15 @@ export default {
 
     assignedEmployee() {
       return this.clientValue.employee ? this.clientValue.employee : null;
+    },
+
+    total() {
+      let total = 0;
+      this.productsValue.forEach((p) => {
+        total += p.price;
+      });
+
+      return total;
     },
   },
 
