@@ -35,15 +35,19 @@
           <span>{{ address }} </span>
         </div>
       </div>
-      <a href="#" class="card-link">Przypisany pracownik</a>
-      <a href="#" class="card-link">Lista zakupionych produktów</a>
+      <router-link
+        v-if="showInfo"
+        :to="{ name: 'client-detail', params: { id: this.clientId } }"
+        class="card-link"
+        >więcej informacji</router-link
+      >
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["client"],
+  props: ["client", "showInfo"],
 
   computed: {
     clientId() {

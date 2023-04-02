@@ -44,6 +44,7 @@
     v-for="client in clientsValue"
     :key="client.id"
     :client="client"
+    :showInfo="true"
   />
 
   <div class="d-flex justify-content-center">

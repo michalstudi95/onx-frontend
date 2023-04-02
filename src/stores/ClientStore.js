@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 export const useClientStore = defineStore("client", {
   state() {
     return {
+      client: null,
       clients: [],
       clientType: "",
       currentPage: null,
@@ -16,6 +17,10 @@ export const useClientStore = defineStore("client", {
   getters: {
     clientsValue(state) {
       return state.clients;
+    },
+
+    clientValue(state) {
+      return state.client;
     },
 
     lastPageValue(state) {
@@ -40,6 +45,10 @@ export const useClientStore = defineStore("client", {
   },
 
   actions: {
+    findClient(id) {
+      this.client = this.clients.find((client) => client.id == id);
+    },
+
     async loadAllClients() {
       await fetch("http://localhost:8000/api/clients")
         .then((response) => response.json())

@@ -45,11 +45,15 @@
     </li>
 
     <li class="nav-item">
-      <a class="nav-link" aria-current="page" href="#">Pracownicy</a>
+      <router-link class="nav-link" :to="{ name: 'employees' }"
+        >Pracownicy
+      </router-link>
     </li>
 
     <li class="nav-item">
-      <a class="nav-link" aria-current="page" href="#">Samochody</a>
+      <router-link class="nav-link" :to="{ name: 'cars' }"
+        >Samochody
+      </router-link>
     </li>
   </ul>
 </template>

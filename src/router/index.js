@@ -1,12 +1,16 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 
-//client list
 import ClientList from "../views/clients/ClientList.vue";
+import ClientDetail from "../views/clients/ClientDetail.vue";
 //managing clients
 import AddClient from "../views/clients/manage/AddClient.vue";
 import EditClient from "../views/clients/manage/EditClient.vue";
 import DeleteClient from "../views/clients/manage/DeleteClient.vue";
+//employees
+import TheEmployees from "../views/employees/TheEmployees.vue";
+//cars
+import TheCars from "../views/cars/TheCars.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,6 +25,13 @@ const router = createRouter({
       path: "/clients",
       name: "client-list",
       component: ClientList,
+    },
+
+    {
+      path: "/clients/:id/",
+      props: true,
+      name: "client-detail",
+      component: ClientDetail,
     },
 
     {
@@ -39,6 +50,18 @@ const router = createRouter({
       path: "/clients/manage/delete",
       name: "delete-client",
       component: DeleteClient,
+    },
+
+    {
+      path: "/employees",
+      name: "employees",
+      component: TheEmployees,
+    },
+
+    {
+      path: "/cars",
+      name: "cars",
+      component: TheCars,
     },
   ],
 });
