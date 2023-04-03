@@ -63,7 +63,7 @@ export default {
     async editClient(client) {
       this.loading = true;
       this.toUpdateSelect = false;
-      await fetch(`http://localhost:8000/api/clients/${this.client.id}`, {
+      await fetch(`http://127.0.0.1:8000/api/clients/${this.client.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
