@@ -15,7 +15,7 @@ export const useCarStore = defineStore("car", {
 
   actions: {
     async loadCars() {
-      await fetch(`http://localhost:8000/api/cars`)
+      await fetch(`http://127.0.0.1:8000/api/cars`)
         .then((response) => response.json())
         .then((data) => {
           console.log(data);

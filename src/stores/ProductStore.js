@@ -15,7 +15,7 @@ export const useProductStore = defineStore("product", {
 
   actions: {
     async loadProductsForClient(id) {
-      await fetch(`http://localhost:8000/api/products?client=${id}`)
+      await fetch(`http://127.0.0.1:8000/api/products?client=${id}`)
         .then((response) => response.json())
         .then((data) => {
           this.products = data;

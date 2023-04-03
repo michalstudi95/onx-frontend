@@ -46,7 +46,7 @@ export const useClientStore = defineStore("client", {
     },
 
     async loadAllClients() {
-      await fetch("http://localhost:8000/api/clients")
+      await fetch("http://127.0.0.1:8000/api/clients")
         .then((response) => response.json())
         .then((data) => {
           this.clients = data;
